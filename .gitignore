@@ -3,3 +3,4 @@ package-lock.json
 cache
 .vscode
 env.js
+.DS_Store

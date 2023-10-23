@@ -8,17 +8,15 @@ const contractAddress = "0xeea94efcefe133bfe683ca8b230251873fa961b1"
 let trader, instance
 
 async function loadContract(sp) {
-    const accounts = await hre.ethers.getSigners();
     return new hre.ethers.Contract(contractAddress, abi, sp);
 }
 
 async function init() {
-    // console.log(hre)
-    //从配置文件"env.js"取其中一个账号
+    // get one account from env.js
     trader = (await hre.ethers.getSigners())[0];
     console.log("user:", trader.address)
 
-    //初始化合约
+    // initialize contract instance
     instance = await loadContract(trader)
 }
 async function main() {
@@ -33,7 +31,6 @@ async function buy(twitterUserName, amount) {
     let protocolFee = new BN((await instance.getProtocolFee(price.toString())).toString());
     let subjectFee = new BN((await instance.getSubjectFee(price.toString())).toString());
     let value = price.add(protocolFee).add(subjectFee).toString();
-    console.log("value", value.toString())
     await confirmTransaction(instance.buyShares(account, amount, { value }), "buyShares")
 }
 
