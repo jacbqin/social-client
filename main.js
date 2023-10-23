@@ -5,7 +5,7 @@ const BN = require("bn.js");
 const abi = JSON.parse(fs.readFileSync('./abi.json', 'utf8'));
 const contractAddress = "0xeea94efcefe133bfe683ca8b230251873fa961b1"
 
-let signer, instance
+let trader, instance
 
 async function loadContract(sp) {
     const accounts = await hre.ethers.getSigners();
@@ -15,39 +15,32 @@ async function loadContract(sp) {
 async function init() {
     // console.log(hre)
     //从配置文件"env.js"取其中一个账号
-    signer = (await hre.ethers.getSigners())[0];
-    console.log("signer:", signer.address)
+    trader = (await hre.ethers.getSigners())[0];
+    console.log("user:", trader.address)
 
     //初始化合约
-    instance = await loadContract(signer)
+    instance = await loadContract(trader)
 }
 async function main() {
     await init();
-    //buy
-    await trade("elonmusk", 1, true)
-
-    //sell
-    // await trade("elonmusk", 1, false)
+    await buy("elonmusk", 2)
+    await sell("elonmusk", 1)
 }
 
-async function trade(twitterUserName, amount, isBuy) {
+async function buy(twitterUserName, amount) {
     let account = toAccount(twitterUserName)
-    console.log(account, isBuy, amount)
-    let supply = await instance.sharesSupply(account)
-    console.log("supply", supply.toString())
-    let priceMethod = isBuy ? instance.getBuyPrice : instance.getSellPrice;
-    let price = new BN((await priceMethod(account, amount)).toString());
+    let price = new BN((await instance.getBuyPrice(account, amount)).toString());
     let protocolFee = new BN((await instance.getProtocolFee(price.toString())).toString());
     let subjectFee = new BN((await instance.getSubjectFee(price.toString())).toString());
-    console.log("price", price.toString())
-    console.log("protocolFee", protocolFee.toString())
-    console.log("subjectFee", subjectFee.toString())
-    let value = isBuy ? price.add(protocolFee).add(subjectFee).toString() : 0;
+    let value = price.add(protocolFee).add(subjectFee).toString();
     console.log("value", value.toString())
-    let actionMethod = isBuy ? instance.buyShares : instance.sellShares;
-    await confirmTransaction(actionMethod(account, amount, { value }), isBuy ? "buyShares" : "sellShares")
+    await confirmTransaction(instance.buyShares(account, amount, { value }), "buyShares")
 }
 
+async function sell(twitterUserName, amount) {
+    let account = toAccount(twitterUserName)
+    await confirmTransaction(instance.sellShares(account, amount), "sellShares")
+}
 
 async function confirmTransaction(promise, action = "") {
     let receipt = await promise;
