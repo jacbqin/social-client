@@ -34,7 +34,7 @@ async function main() {
     await init();
     // await buy("satyanadella", 2,0)
     // await sell("satyanadella", 1,0)
-    await readAndTrade("test.xlsx", "text-result.xlsx")
+    await readAndTrade("test.xlsx", "test-result.xlsx")
 }
 
 // excel里面:
