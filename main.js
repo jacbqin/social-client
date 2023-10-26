@@ -4,18 +4,16 @@ const hre = require("hardhat");
 const moment = require('moment');
 const BN = require("bn.js");
 const xlsx = require('xlsx');
-const { toBN, toWei, fromWei } = require("web3-utils");
-const etherToWei = amount => toBN(toWei(amount.toString(), "ether"));
+const { fromWei } = require("web3-utils");
 const weiToEther = amount => fromWei(amount.toString(), "ether");
-const etherToWeiString = amount => etherToWei(amount).toString(10);
 const humanBN = d => parseFloat(parseFloat(weiToEther(d.toString())).toFixed(8));
 const abi = JSON.parse(fs.readFileSync('./abi.json', 'utf8'));
-const contractAddress = "0xeea94efcefe133bfe683ca8b230251873fa961b1"
+const { contracts } = require('./env.js')
 
 let trader, instance
 
 async function loadContract(sp) {
-    return new hre.ethers.Contract(contractAddress, abi, sp);
+    return new hre.ethers.Contract(contracts[hre.network.name], abi, sp);
 }
 
 

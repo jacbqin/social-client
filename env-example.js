@@ -1,5 +1,9 @@
 module.exports = {
     infuraApiKey: "3e55ce6cfad9447abbca943899994e16",
+    contracts: {
+        base: "0xecdcb4779c19e2e1a983c6a539a9221c6aafe345",
+        basegoerli: "0x0cafe1c9e0eaa09204793af74d6cf474426888c4",
+    },
     accounts: [
         {
             name: "account1",
