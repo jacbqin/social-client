@@ -46,7 +46,9 @@ async function readAndTrade(excelPath, resultPath) {
         let price = parseFloat(item['Price'] || "0")
         if (!amount || !twtiterUsername) continue
         console.log(JSON.stringify(item))
-        let result = await (amount > 0 ? buy : sell)(twtiterUsername, amount, price)
+        let method = amount > 0 ? buy : sell
+        if (amount < 0) amount = -amount;
+        let result = await method(twtiterUsername, amount, price)
         let { tradePrice, protocolFee, subjectFee, hash } = result || {}
         if (tradePrice) {
             item['TradePrice'] = humanBN(tradePrice)
