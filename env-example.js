@@ -3,6 +3,8 @@ module.exports = {
     contracts: {
         base: "0xecdcb4779c19e2e1a983c6a539a9221c6aafe345",
         basegoerli: "0x0cafe1c9e0eaa09204793af74d6cf474426888c4",
+        zkgoerli: "0x80f1101fb35cb39d2bd4a2be044a0f4370a9dbe1",
+        zksync: "0x80f1101fb35cb39d2bd4a2be044a0f4370a9dbe1",
     },
     accounts: [
         {

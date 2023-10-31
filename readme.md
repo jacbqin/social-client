@@ -9,9 +9,15 @@ cp env-example.js env.js
 # install required libraries
 npm i
 
-# run example in base testnet
+# run in base testnet
 npx hardhat run main.js --network basegoerli
 
-# run example in base mainnet
+# run in base mainnet
 npx hardhat run main.js --network base
+
+# run in zksync mainnet
+npx hardhat run main.js --network zksync
+
+# run in zksync testnet
+npx hardhat run main.js --network zkgoerli
 ```
